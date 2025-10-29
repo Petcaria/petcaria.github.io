@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Petcariando | Petcaria</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Encuentra tu especialista veterinario">
+  <meta name="keywords" content="veterinario, especialista, animales, mascotas, salud animal, veterinaria, consulta veterinaria">
+  <meta name="author" content="Petcaria">
+  <meta name="robots" content="index, follow">
+
+  <!-- PWA manifest & theme color -->
+  <meta name="theme-color" content="#17B26A">
+
+  <!-- Registrar Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('https://petcaria.com/config/pwa/service-worker.js');
+      });
+    }
+  </script>
+
+  <script src="https://assets.petcaria.com/js/functions.js"></script>
+  <script>
+    function detectarUbicacion(callback) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+            .then(response => response.json())
+            .then(data => {
+              callback({
+                country: data.address.country,
+                state: data.address.state || data.address.region || ''
+              });
+            });
+        });
+      } else {
+        callback({country: '', state: ''});
+      }
+    }
+  </script>
+  <script src="https://assets.petcaria.com/js/location.js"></script>
+
+  <!-- Íconos de Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Fuente Londrina Solid -->
+  <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --light-green: #A8E6CF;
+      --dark-green: #17B26A;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9fdfb;
+      font-family: "Londrina Solid", cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1.2s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(1.03); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      max-width: 90%;
+      animation: contentFade 1.5s ease-out forwards;
+    }
+
+    @keyframes contentFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title {
+      font-size: 2.4em;
+      color: var(--dark-green);
+      margin-bottom: 25px;
+      line-height: 1.2em;
+    }
+
+    .loader {
+      position: relative;
+      width: 220px;
+      height: 50px;
+      margin: 0 auto;
+    }
+
+    .icon {
+      position: absolute;
+      font-size: 2em;
+      color: var(--dark-green);
+      animation: bounce 0.6s infinite alternate, pulse 2s infinite ease-in-out;
+    }
+
+    .left-paw {
+      left: 0;
+      animation-delay: 0s, 0s;
+    }
+
+    .right-paw {
+      right: 0;
+      animation-delay: 0.3s, 0.3s;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-15px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* 🔹 RESPONSIVE DESIGN 🔹 */
+    @media (max-width: 768px) {
+      .title {
+        font-size: 1.9em;
+      }
+      .icon {
+        font-size: 1.7em;
+      }
+      .loader {
+        width: 180px;
+        height: 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.6em;
+        margin-bottom: 20px;
+      }
+      .icon {
+        font-size: 1.5em;
+      }
+      .loader {
+        width: 150px;
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">Petcariando la web...</h1>
+    <div class="loader">
+      <span class="icon left-paw fa fa-paw"></span>
+      <span class="icon right-paw fa fa-paw"></span>
+    </div>
+  </div>
+
+</body>
+</html>
