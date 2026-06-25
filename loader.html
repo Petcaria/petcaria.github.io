@@ -1,175 +1,234 @@
+<!--
+  Petcaria® — Cuidado integral para animales de pequeña especie
+  Página de "en remodelación"
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Petcariando | Petcaria</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="favicon.png" type="image/x-icon">
-  <meta name="description" content="Encuentra tu especialista veterinario">
-  <meta name="keywords" content="veterinario, especialista, animales, mascotas, salud animal, veterinaria, consulta veterinaria">
-  <meta name="author" content="Petcaria">
-  <meta name="robots" content="index, follow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petcaria® · Cuidado integral para animales de pequeña especie</title>
+<meta name="description" content="Estamos preparando una nueva casa digital para el cuidado integral de tu mejor amigo.">
+<link rel="icon" href="https://raw.petcaria.com/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /*
+   * Tipografía de marca "More Sugar" — Regular.
+   * Conecta tu archivo de fuente aquí cuando lo tengas (.woff2):
+   *
+   * @font-face{
+   *   font-family:'More Sugar';
+   *   src:url('fonts/more-sugar-regular.woff2') format('woff2');
+   *   font-weight:400;
+   *   font-display:swap;
+   * }
+   *
+   * Mientras tanto, .mark y .headline usan Fraunces como respaldo visual.
+   */
 
-  <!-- PWA manifest & theme color -->
-  <meta name="theme-color" content="#17B26A">
+  :root{
+    /* Identidad core */
+    --azul-petcaria:#014f67;
+    --teal-salud:#089b95;
+    --menta:#37cfb1;
 
-  <!-- Registrar Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('https://petcaria.com/config/pwa/service-worker.js');
-      });
-    }
-  </script>
+    /* Neutros */
+    --blanco:#FFFFFF;
+    --gris-fondo:#F4F8F9;
+    --negro-texto:#1A262A;
+    --gris-borde:#E0EAEB;
 
-  <script src="https://assets.petcaria.com/js/functions.js"></script>
-  <script>
-    function detectarUbicacion(callback) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
-            .then(response => response.json())
-            .then(data => {
-              callback({
-                country: data.address.country,
-                state: data.address.state || data.address.region || ''
-              });
-            });
-        });
-      } else {
-        callback({country: '', state: ''});
-      }
-    }
-  </script>
-  <script src="https://assets.petcaria.com/js/location.js"></script>
+    /* Sistema */
+    --coral:#F4A261;
+  }
 
-  <!-- Íconos de Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  *{ box-sizing:border-box; margin:0; padding:0; }
 
-  <!-- Fuente Londrina Solid -->
-  <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid&display=swap" rel="stylesheet">
+  html,body{
+    width:100%;
+    height:100%;
+    background:var(--blanco);
+    color:var(--negro-texto);
+    font-family:'Inter', sans-serif;
+    overflow:hidden;
+  }
 
-  <style>
-    :root {
-      --light-green: #A8E6CF;
-      --dark-green: #17B26A;
-    }
+  body{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    position:relative;
+    padding:24px;
+    text-align:center;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  /* textura sutil de fondo: degradados con los colores core, muy diluidos */
+  body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 16% 18%, rgba(8,155,149,0.07), transparent 42%),
+      radial-gradient(circle at 84% 80%, rgba(1,79,103,0.06), transparent 45%),
+      linear-gradient(180deg, var(--blanco) 0%, var(--gris-fondo) 100%);
+    pointer-events:none;
+  }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #f9fdfb;
-      font-family: "Londrina Solid", cursive;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      opacity: 0;
-      animation: fadeIn 1.2s ease-in forwards;
-    }
+  /* Logotipo / wordmark — fuente de marca, color Azul Petcaria (autoridad médica) */
+  .mark{
+    position:relative;
+    z-index:1;
+    font-family:'More Sugar', 'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(2.3rem, 6vw, 4rem);
+    letter-spacing:0.01em;
+    color:var(--azul-petcaria);
+    line-height:1;
+  }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(1.03); }
-      to { opacity: 1; transform: scale(1); }
-    }
+  .mark .reg{
+    font-family:'Inter', sans-serif;
+    font-size:0.4em;
+    vertical-align:super;
+    font-weight:600;
+    color:var(--teal-salud);
+  }
 
-    .container {
-      text-align: center;
-      padding: 20px;
-      max-width: 90%;
-      animation: contentFade 1.5s ease-out forwards;
-    }
+  .kicker{
+    position:relative;
+    z-index:1;
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--teal-salud);
+    font-weight:600;
+    margin-bottom:14px;
+  }
 
-    @keyframes contentFade {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  /* ---------- sendero de huellas (íconos Font Awesome: fiables en cualquier navegador) ---------- */
+  .trail-wrap{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:22px;
+    height:54px;
+    margin:30px 0 34px;
+  }
 
-    .title {
-      font-size: 2.4em;
-      color: var(--dark-green);
-      margin-bottom: 25px;
-      line-height: 1.2em;
-    }
+  .paw{
+    font-size:1.6rem;
+    color:var(--teal-salud);
+    opacity:.35;
+    animation: pisada 1.4s ease-in-out infinite;
+  }
 
-    .loader {
-      position: relative;
-      width: 220px;
-      height: 50px;
-      margin: 0 auto;
-    }
+  .paw:nth-child(odd){  transform:translateY(0); }
+  .paw:nth-child(even){ animation-delay:.2s; }
 
-    .icon {
-      position: absolute;
-      font-size: 2em;
-      color: var(--dark-green);
-      animation: bounce 0.6s infinite alternate, pulse 2s infinite ease-in-out;
-    }
+  .paw:nth-child(1){ animation-delay:0s;   }
+  .paw:nth-child(2){ animation-delay:.2s;  }
+  .paw:nth-child(3){ animation-delay:.4s;  }
+  .paw:nth-child(4){ animation-delay:.6s;  }
+  .paw:nth-child(5){ animation-delay:.8s;  }
 
-    .left-paw {
-      left: 0;
-      animation-delay: 0s, 0s;
-    }
+  @keyframes pisada{
+    0%, 100% { transform:translateY(0) scale(1);     opacity:.35; }
+    50%      { transform:translateY(-14px) scale(1.15); opacity:1; }
+  }
 
-    .right-paw {
-      right: 0;
-      animation-delay: 0.3s, 0.3s;
-    }
+  /* ---------- copy ---------- */
+  h1.headline{
+    font-family:'More Sugar', 'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(1.3rem, 2.4vw, 1.7rem);
+    max-width:560px;
+    color:var(--azul-petcaria);
+    margin-bottom:10px;
+    position:relative;
+    z-index:1;
+  }
 
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to { transform: translateY(-15px); }
-    }
+  p.sub{
+    font-size:0.98rem;
+    color:var(--negro-texto);
+    opacity:0.72;
+    max-width:420px;
+    line-height:1.6;
+    margin-bottom:6px;
+    position:relative;
+    z-index:1;
+  }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
+  footer{
+    position:absolute;
+    bottom:28px;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    color:var(--azul-petcaria);
+    opacity:0.85;
+    z-index:1;
+  }
 
-    /* 🔹 RESPONSIVE DESIGN 🔹 */
-    @media (max-width: 768px) {
-      .title {
-        font-size: 1.9em;
-      }
-      .icon {
-        font-size: 1.7em;
-      }
-      .loader {
-        width: 180px;
-        height: 40px;
-      }
-    }
+  footer a{
+    color:var(--teal-salud);
+    text-decoration:none;
+    font-weight:600;
+    border-bottom:1px solid rgba(8,155,149,0.35);
+    padding-bottom:1px;
+  }
 
-    @media (max-width: 480px) {
-      .title {
-        font-size: 1.6em;
-        margin-bottom: 20px;
-      }
-      .icon {
-        font-size: 1.5em;
-      }
-      .loader {
-        width: 150px;
-        height: 35px;
-      }
-    }
-  </style>
+  footer a:hover{
+    border-bottom-color:var(--teal-salud);
+  }
+
+  footer .dot{
+    margin:0 8px;
+    color:var(--gris-borde);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .paw{ animation:none; opacity:0.7; }
+  }
+
+  @media (max-width: 480px){
+    footer{ bottom:18px; font-size:0.72rem; }
+  }
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <h1 class="title">Petcariando la web...</h1>
-    <div class="loader">
-      <span class="icon left-paw fa fa-paw"></span>
-      <span class="icon right-paw fa fa-paw"></span>
-    </div>
+  <p class="kicker">En remodelación</p>
+
+  <h2 class="mark">Petcaria<span class="reg">®</span></h2>
+
+  <div class="trail-wrap">
+    <i class="paw fas fa-paw"></i>
+    <i class="paw fas fa-paw"></i>
+    <i class="paw fas fa-paw"></i>
+    <i class="paw fas fa-paw"></i>
+    <i class="paw fas fa-paw"></i>
   </div>
+
+  <h1 class="headline">Estamos preparando una nueva casa digital</h1>
+  <p class="sub">Cuidado integral de todas las especies. Confianza, salud y calidez — vuelve pronto.</p>
+
+  <footer>
+    Petcaria<sup>®</sup> <span class="dot">·</span> <a href="https://evamtz.me" target="_blank" rel="noopener noreferrer">evamtz.me</a> <span class="dot">·</span> <span id="year"></span>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
 </body>
 </html>
